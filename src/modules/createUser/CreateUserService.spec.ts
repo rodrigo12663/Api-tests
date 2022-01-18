@@ -3,39 +3,41 @@ import { UsersRepositoryInMemory } from "../../repositories/in-memory/UsersRepos
 import { IUsersRepository } from "../../repositories/IUsersRepositories";
 import { CreateUserService } from "./CreateUserService";
 
-describe("Create user", () => {
-  let usersRepository: IUsersRepository;
-  let createUserService: CreateUserService;
+describe("Create user",()=>{
+  let usersReporsitory :IUsersRepository;
+  let createUserService:CreateUserService;
 
-  beforeAll(() => {
-    usersRepository = new UsersRepositoryInMemory();
-    createUserService = new CreateUserService(usersRepository);
-  });
+  beforeAll(()=>{
+    usersReporsitory = new  UsersRepositoryInMemory();
+    createUserService = new CreateUserService(usersReporsitory );
 
-  it("should be able to create a new user", async () => {
-    const userData: User = {
-      name: "Test Name",
-      email: "test@test.com.br",
-      username: "testusername",
-    };
+  })
 
+  it("should be able to a create new user",async ()=>{
+    const userData:User={
+      name: "teste",
+      username: "novo",
+      email: "tes2t@gmail.com"
+    }
     const user = await createUserService.execute(userData);
-
     expect(user).toHaveProperty("id");
-    expect(user.username).toBe("testusername");
-  });
+    expect(user.username).toBe("novo");
+  })
 
-  it("should not be able to create an existing user", async () => {
-    const userData: User = {
-      name: "Test Existing Name",
-      email: "testexisting@test.com.br",
-      username: "testexisting",
-    };
+  it("should not be able to an existing user",async ()=>{
+
+    const userData:User={
+      name: "Test exists teste",
+      username: "Teste novo",
+      email: "test@gmail.com",
+    }
 
     await createUserService.execute(userData);
 
-    await expect(createUserService.execute(userData)).rejects.toEqual(
-      new Error("User already exists!")
-    );
+    // const user = await createUserService.execute(userData);
+
+    await expect(createUserService.execute(userData))
+    .rejects
+    .toEqual(new Error("User already exists!"));
   });
-});
+})
